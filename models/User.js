@@ -9,6 +9,20 @@ const UserSchema = new mongoose.Schema({
     maxlength: 50,
     minlength: 3,
   },
+  lastname: {
+    type: String,
+    trim: true,
+    maxlength: [20, 'Last name should be less than 20 letters'],
+    minlength: [3, 'Last name should be more than 3 letters'],
+    default: 'last name',
+  },
+  location: {
+    type: String,
+    trim: true,
+    maxlength: [50, 'Location should be less than 50 letters'],
+    minlength: [3, 'Location should be more than 3 letters'],
+    default: 'my city',
+  },
   email: {
     type: String,
     required: [true, 'Please provide email'],

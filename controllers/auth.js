@@ -5,7 +5,7 @@ const { BadRequestError, UnauthenticatedError } = require('../errors')
 const register = async (req, res) => {
   const user = await User.create({ ...req.body })
   const token = user.createJWT()
-  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token })
+  res.status(StatusCodes.CREATED).json({ user: { email: user.email, lastname: user.lastname, location: user.location, name: user.name, token }, })
 }
 
 const login = async (req, res) => {
@@ -24,10 +24,27 @@ const login = async (req, res) => {
   }
   // compare password
   const token = user.createJWT()
-  res.status(StatusCodes.OK).json({ user: { name: user.name }, token })
+  res.status(StatusCodes.OK).json({ user: { email: user.email, lastname: user.lastname, location: user.location, name: user.name, token }, })
+}
+
+const updateUser = async (req, res) => {
+  const { name, email, lastName, location } = req.body
+  if (!name || !email || !lastName || !location) throw new BadRequestError('Please provide all values')
+  const user = await User.findOne({ _id: req.user.userId })
+  if (!user) throw new UnauthenticatedError('User not exist')
+  user.name = name
+  user.lastname = lastName
+  user.email = email
+  user.location = location
+  await user.save()
+  const token = user.createJWT()
+
+  res.status(StatusCodes.OK).json({ user: { email: user.email, lastname: user.lastname, location: user.location, name: user.name, token }, })
+
 }
 
 module.exports = {
   register,
   login,
+  updateUser,
 }
