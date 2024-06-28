@@ -2,6 +2,7 @@ const Job = require('../models/Job')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const getAllJobs = async (req, res) => {
   const { status, jobType, sort, search } = req.query
@@ -145,9 +146,8 @@ const showStats = async (req, res) => {
     .reverse();
 
 
-  console.log(defaultStats);
 
-  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications: [] })
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
 }
 
 module.exports = {
